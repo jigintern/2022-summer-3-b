@@ -7,13 +7,57 @@
 </head>
 
 <body>
-  <h1 id="welcomeMessage"></h1>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+  <div id="board">
+    <span>　　時刻　　　　　　　　名前　　　コメント</span>
+    <ul id="save-data-list">
+    </ul>
+    <div id="nameInputLabel">　　名前　　　コメント</div>
+    <input id="nameInput" type="text" />
+    <input id="messageInput" type="text" />
+    <button id="SendButton">送信</button>
+  </div>
 
   <script type="module">
+
     window.onload = async (event) => {
-      const response = await fetch("/welcome-message");
-      document.querySelector("#welcomeMessage").innerText = await response.text();
+
     };
+    function updateSaveDataHistory (saveDataJson) {
+      document.getElementById('save-data-list').innerText = "";
+      for (let key in saveDataJson) {
+        console.log(saveDataJson[key]);
+        var saveDataJsonList = document.createElement('li');
+        saveDataJsonList.textContent = saveDataJson[key].date + '　' + saveDataJson[key].name + '　' + saveDataJson[key].message;
+        document.getElementById('save-data-list').appendChild(saveDataJsonList);
+      }
+    };
+    window.addEventListener('DOMContentLoaded', function () {
+      setInterval(async () => {
+        var saveDataResponse = await fetch("/saveData");
+        var saveDataJson = await saveDataResponse.json();
+        console.log(saveDataJson);
+        for (let key in saveDataJson) {
+          console.log(saveDataJson[key].message);
+        }
+        await updateSaveDataHistory(saveDataJson);
+
+      }, 1000);
+
+    });
+
+
+    document.querySelector("#SendButton").onclick = async (event) => {
+      let name = document.querySelector("#nameInput").value;
+      let message = document.querySelector("#messageInput").value;
+      const response = await fetch("/save", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, message })
+      });
+      return;
+    }
+
   </script>
 </body>
 
