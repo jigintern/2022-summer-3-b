@@ -39,7 +39,7 @@ serve(async (req) => {
   if (req.method === "POST" && pathname === "/save") {
     const now = new Date();
     const requestJson = await req.json();
-    push(ref(database, 'saveData'), {
+    push(ref(database, 'saveData'), { //saveDataテーブルに、name,message,dateの情報を入れる
       name: requestJson.name,
       message: requestJson.message,
       date: now.getMonth() + 1 + '月' + now.getDate() + '日' + now.getHours() + '時' + now.getMinutes() + '分'
@@ -48,7 +48,7 @@ serve(async (req) => {
   }
 
   if (req.method === "GET" && pathname === "/saveData") {
-    const starCountRef = ref(database, 'saveData');
+    const starCountRef = ref(database, 'saveData'); //saveDataテーブルから情報を取り出す
     let saveDataLists;
     onValue(starCountRef, (snapshot) => {
       saveDataLists = snapshot.val();
