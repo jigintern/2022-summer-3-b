@@ -22,14 +22,14 @@ import {
 
 serve(async (req) => {
   const firebaseConfig = {
-    apiKey: "AIzaSyD3Ss5TXPzayE1K3BgdZRLCHugXE2yDcHg",
-    authDomain: "jig-jp-deno-2022.firebaseapp.com",
-    projectId: "deno-jig-jp-deno-2022",
-    storageBucket: "jig-jp-deno-2022.appspot.com",
-    messagingSenderId: "346542836062",
-    appId: "1:346542836062:web:1f1a78d1828ec4d438a7cf",
-    measurementId: "G-V822WJ6JXY",
-    databaseURL: "https://jig-jp-deno-2022-default-rtdb.firebaseio.com",
+    apiKey: "sample",
+    authDomain: "sample",
+    projectId: "sample",
+    storageBucket: "sample",
+    messagingSenderId: "sample",
+    appId: "sample",
+    measurementId: "sample",
+    databaseURL: "sample",
   };
   const app = initializeApp(firebaseConfig);
   const database = getDatabase(app);
