@@ -54,6 +54,7 @@ serve(async (req) => {
       saveDataLists = snapshot.val();
     });
     return new Response(JSON.stringify(saveDataLists));
+
   }
 
   return serveDir(req, {
