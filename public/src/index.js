@@ -9,5 +9,8 @@ const router = new VueRouter({
 new Vue({
   el: "#app",
   router,
-  template: "<router-view />",
+  vuetify: new Vuetify(),
+  template: `
+    <v-app><router-view /></v-app>
+  `,
 });
