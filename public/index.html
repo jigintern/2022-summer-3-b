@@ -7,14 +7,10 @@
 </head>
 
 <body>
-  <h1 id="welcomeMessage"></h1>
-
-  <script type="module">
-    window.onload = async (event) => {
-      const response = await fetch("/welcome-message");
-      document.querySelector("#welcomeMessage").innerText = await response.text();
-    };
-  </script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.0/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue-router@3.6.4/dist/vue-router.js"></script>
+  <div id="app" />
+  <script type="module" src="src/index.js"></script>
 </body>
 
 </html>
