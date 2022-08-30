@@ -1,5 +1,5 @@
 export const HelloWorld = Vue.component("HelloWorld", {
-  template: "<div>{{ hi }}</div>",
+  template: "<v-btn>{{ hi }}</v-btn>",
   data() {
     return { hi: "Loading..." };
   },
