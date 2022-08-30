@@ -22,7 +22,14 @@ export const Home = {
   },
 
   methods: {
-    async startMatching() {},
+    startMatching() {
+      this.$router.push({
+        name: "matching",
+        params: {
+          taskName: this.taskName,
+        },
+      });
+    },
   },
 
   computed: {
