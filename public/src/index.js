@@ -1,8 +1,8 @@
-import { HelloWorld } from "/src/components/HelloWorld.js";
+import { Home } from "/src/pages/Home.js";
 
 const router = new VueRouter({
   routes: [
-    { path: "/", component: HelloWorld },
+    { path: "/", component: Home },
   ],
 });
 
