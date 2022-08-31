@@ -2,6 +2,7 @@ import { Home } from "/src/pages/Home.js";
 import { Matching } from "/src/pages/Matching.js";
 import { Task } from "./pages/Task.js";
 import { UploadPhoto } from "./pages/UploadPhoto.js";
+import { Evaluate } from "./pages/Evaluate.js";
 
 const router = new VueRouter({
   routes: [
@@ -9,6 +10,7 @@ const router = new VueRouter({
     { path: "/matching", name: "matching", component: Matching, props: true },
     { path: "/task", name: "task", component: Task, props: true },
     { path: "/upload-photo", name: "upload-photo", component: UploadPhoto },
+    { path: "/evaluate", name: "evaluate", component: Evaluate },
   ],
 });
 
