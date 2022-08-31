@@ -20,10 +20,6 @@ for(let i = 0; i<10;i++){
 function getRandomInt(max){
   return Math.floor(Math.random() * max);
 }
-const matchinfo = {//マッチングで必要な情報
-  taskname : "taskname",
-  username : "dammy"
-};
 
 serve(async (req) => {
   const pathname = new URL(req.url).pathname;
