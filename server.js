@@ -15,7 +15,7 @@ class User  {
 }
 const userArray = [];
 for(let i = 0; i<10;i++){
-  userArray.push(new User("user"+i,i,0,"picture/"));
+  userArray.push(new User("user"+i,i,0,""));
 }
 function getRandomInt(max){
   return Math.floor(Math.random() * max);
