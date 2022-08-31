@@ -28,7 +28,9 @@ export const Evaluate = {
   async created() {
     const res = await fetch("/api/task/evalute");
     this.evaluate = await res.json();
-    this.evaluate.image ??= "/picture/IMG_1589.jpg";
+    if (this.evaluate.image === "") {
+      this.evaluate.image = "/picture/IMG_1589.jpg";
+    }
   },
 
   methods: {
