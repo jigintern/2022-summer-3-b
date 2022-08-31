@@ -43,7 +43,7 @@ serve(async (req) => {
     return new Response(JSON.stringify(user));
   }
   if(req.method == "POST" && pathname === "/api/task/evalute"){//評価された回数を保存するAPI
-    const requestJson = req.json();
+    const requestJson = await req.json();
     const userid = requestJson.id;
     for(let i = 0; i < userArray.length; i++){//ダミーのAPIを探してヒットするとrateが上がる
       if(userid == userArray[i].id){
@@ -53,7 +53,7 @@ serve(async (req) => {
     return new Response();
   }
   if(req.method == "POST" && pathname === "/api/habipower"){
-    const requestJson = req.json();
+    const requestJson = await req.json();
     const userid = requestJson.id;
     const userrate = requestJson.rate;
     const countrate = 0;
