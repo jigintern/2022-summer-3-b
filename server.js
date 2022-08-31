@@ -25,14 +25,6 @@ serve(async (req) => {
   const pathname = new URL(req.url).pathname;
   console.log(pathname);
 
-  if(req.method == "POST" && pathname === "/match_finish"){//マッチング完了
-    const requestJson = await req.json();
-    matchinfo.taskname = requestJson.taskname;
-    if(requestJson.taskname == matchinfo.username){
-      return new Response(matchinfo.taskname);
-    }
-    return new Response("取得エラー",{status:400});
-  }
   if(req.method =="POST" && pathname === "/task_name"){//タスク名取得API
     const requestJson = await req.json();
     matchinfo.taskname = requestJson.taskname;//タスク名の受け取り
