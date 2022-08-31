@@ -25,12 +25,6 @@ serve(async (req) => {
   const pathname = new URL(req.url).pathname;
   console.log(pathname);
 
-  if(req.method =="POST" && pathname === "/task_name"){//タスク名取得API
-    const requestJson = await req.json();
-    matchinfo.taskname = requestJson.taskname;//タスク名の受け取り
-    //ダミーなのでオウム返し
-    return new Response(matchinfo.taskname);
-  }
   if(req.method == "POST" && pathname === "/user_name"){//ユーザー識別子取得API
     // const requestJson = await req.json();
     // const username = requestJson.username;//ユーザー識別子受け取り
