@@ -1,22 +1,32 @@
 export const Camera = {
   template: `
-    <v-sheet :width="width">
-      <video
-        ref="video"
-        @loadeddata="initHeight"
-        :width="width"
-        :height="height"
-      />
+    <v-container fill-height>
+      <v-row fill-height justify="center" align-content="center">
+
+        <v-col align="center" cols="12">
+          <video
+            ref="video"
+            @loadeddata="initHeight"
+            style="width: 100%;"
+          />
+        </v-col>
+
+        <v-col align="center" cols="12">
+          <v-btn @click="capture" icon>
+            <v-icon>mdi-camera</v-icon>
+          </v-btn>
+        </v-col>
+
+      </v-row>
+
       <canvas
         v-show="false"
         ref="canvas"
         :width="width"
         :height="height"
       />
-      <v-btn @click="capture" icon>
-        <v-icon>mdi-camera</v-icon>
-      </v-btn>
-    </v-sheet>
+
+    </v-container>
   `,
 
   data() {

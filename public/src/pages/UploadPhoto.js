@@ -3,11 +3,11 @@ import { Camera } from "../components/Camera.js";
 export const UploadPhoto = {
   template: `
     <v-container fill-height>
-      <v-row justify="center" align-content="center">
-        <v-col align="center">
+      <v-row fill-height justify="center" align-content="center">
+        <v-col align="center" cols="10">
 
-          <v-card v-if="captured" :width="width">
-            <v-img :src="captured.data" />
+          <v-card v-if="captured">
+            <v-img :src="captured.data" style="width:100%;"/>
             <v-card-actions>
               <v-btn @click="retry">撮り直し</v-btn>
               <v-spacer />
@@ -15,7 +15,7 @@ export const UploadPhoto = {
             </v-card-actions>
           </v-card>
 
-          <v-card v-else :width="width">
+          <v-card v-else>
             <camera @capture="capture" :width="width" />
           </v-card>
 
@@ -28,7 +28,7 @@ export const UploadPhoto = {
 
   data() {
     return {
-      width: 300,
+      width: 500,
       captured: null,
     };
   },
