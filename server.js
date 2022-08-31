@@ -44,13 +44,34 @@ serve(async (req) => {
   }
   if(req.method == "POST" && pathname === "/api/task/evalute"){//評価された回数を保存するAPI
     const requestJson = req.json();
-    const user_id = requestJson.id;
+    const userid = requestJson.id;
     for(let i = 0; i < userArray.length; i++){//ダミーのAPIを探してヒットするとrateが上がる
-      if(user_id == userArray[i].id){
+      if(userid == userArray[i].id){
         userArray[i].rate++;
       }
     }
     return new Response();
+  }
+  if(req.method == "POST" && pathname === "/api/habipower"){
+    const requestJson = req.json();
+    const userid = requestJson.id;
+    const userrate = requestJson.rate;
+    const countrate = 0;
+    const habipower = 0;
+    for(let i = 0; i < userArray.length; i++){//今回順位を表示するユーザーを探す
+      if(userid == userArray[i].id){
+        for(let j = 0; j < userArray.length; j++){//下に何人いるかカウントする
+          if(userrate > userArray[j].rate){
+            countrate++;
+          }
+        }
+      }
+    }
+    habipower = countrate * 256;//ハビパワーのロジック後で考える
+    if(countrate == 0){
+      habipower = 256 - 56;
+    }
+    return new Response(habipower);
   }
   return serveDir(req, {
     fsRoot: "public",
