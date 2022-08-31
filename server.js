@@ -76,7 +76,10 @@ serve(async (req) => {
     const image = requestJson.image;//画像のバイナリデータを受け取る
     return new Response(image);//そのまま返す
   }
-
+  if(req.method == "GET" && pathname === "/api/task/evalute"){//評価する相手をランダムで表示
+    const user = userarray[getRandomInt(10)];
+    return new Response(JSON.stringify(user));
+  }
   return serveDir(req, {
     fsRoot: "public",
     urlRoot: "",
