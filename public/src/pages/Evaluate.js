@@ -35,10 +35,10 @@ export const Evaluate = {
 
   methods: {
     favorite() {
-      // fetch("/api/task/evalute", {
-      //   method: "POST",
-      //   body: {id: ...},
-      // });
+      fetch("/api/task/evalute", {
+        method: "POST",
+        body: JSON.stringify({ id: this.evaluate.id }),
+      });
     },
 
     jumpToHome() {
