@@ -35,6 +35,13 @@ export const Matching = {
     // });
 
     // マッチ開始までブロック
-    await new Promise((resolve) => setTimeout(resolve), 3000);
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+
+    this.$router.push({
+      name: "task",
+      params: {
+        taskName: this.taskName,
+      },
+    });
   },
 };
