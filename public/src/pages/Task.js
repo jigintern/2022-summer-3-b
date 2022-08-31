@@ -62,7 +62,7 @@ export const Task = {
   methods: {
     complete() {
       // fetch("/api/task/complete", { method: "POST" });
-      this.$router.go(-2);
+      this.$router.push({ name: "upload-photo" });
     },
     setProgress(progress) {
       this.progress = progress;
