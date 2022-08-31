@@ -1,8 +1,10 @@
-import { HelloWorld } from "/src/components/HelloWorld.js";
+import { Home } from "/src/pages/Home.js";
+import { Matching } from "/src/pages/Matching.js";
 
 const router = new VueRouter({
   routes: [
-    { path: "/", component: HelloWorld },
+    { path: "/", name: "home", component: Home },
+    { path: "/matching", name: "matching", component: Matching, props: true },
   ],
 });
 
