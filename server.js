@@ -25,12 +25,6 @@ serve(async (req) => {
   const pathname = new URL(req.url).pathname;
   console.log(pathname);
 
-  if(req.method == "POST" && pathname === "/user_name"){//ユーザー識別子取得API
-    // const requestJson = await req.json();
-    // const username = requestJson.username;//ユーザー識別子受け取り
-    matchinfo.username = "ダミーユーザー";
-    return new Response(matchinfo.username);
-  }
   if(req.method == "POST" && pathname === "/move_screen"){//画面遷移API
     const requestJson = await req.json();
     //recomendflag = requestJson.flag;//通知が来てるか来てないか
