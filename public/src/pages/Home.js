@@ -1,6 +1,7 @@
 export const Home = {
   template: `
     <v-container fill-height>
+
       <v-row justify="center" align-content="center">
         <v-col align="center" cols="10">
           <v-text-field
@@ -8,6 +9,10 @@ export const Home = {
             :rules="[v => !!v || 'タスク名は必須です']"
             label="タスク名を入力"
           />
+        </v-col>
+
+        <v-col align="center" cols="12">
+          <v-btn @click="jumpToEvaluate">評価画面へ</v-btn>
           <v-btn
             :disabled="invalidTaskName"
             color="primary"
@@ -15,6 +20,7 @@ export const Home = {
           >マッチング開始</v-btn>
         </v-col>
       </v-row>
+
     </v-container>
   `,
   data() {
@@ -22,6 +28,9 @@ export const Home = {
   },
 
   methods: {
+    jumpToEvaluate() {
+      this.$router.replace("evaluate");
+    },
     startMatching() {
       this.$router.push({
         name: "matching",
