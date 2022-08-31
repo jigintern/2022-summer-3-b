@@ -40,6 +40,15 @@ serve(async (req) => {
     const user = userarray[getRandomInt(10)];
     return new Response(JSON.stringify(user));
   }
+  if(req.method == "POST" && pathname === "/api/task/evalute"){//評価された回数を保存するAPI
+    const requestJson = req.json();
+    const user_id = requestJson.id;
+    for(let i = 0; i < 10; i++){//ダミーのAPIを探してヒットするとrateが上がる
+      if(user_id == userarray[i].id){
+        userarray[i].rate++;
+      }
+    }
+  }
   return serveDir(req, {
     fsRoot: "public",
     urlRoot: "",
