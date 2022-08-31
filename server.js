@@ -39,13 +39,13 @@ serve(async (req) => {
     return new Response();//そのまま返す
   }
   if(req.method == "GET" && pathname === "/api/task/evalute"){//評価する相手をランダムで表示
-    const user = userArray[getRandomInt(10)];
+    const user = userArray[getRandomInt(userArray.length)];
     return new Response(JSON.stringify(user));
   }
   if(req.method == "POST" && pathname === "/api/task/evalute"){//評価された回数を保存するAPI
     const requestJson = req.json();
     const user_id = requestJson.id;
-    for(let i = 0; i < 10; i++){//ダミーのAPIを探してヒットするとrateが上がる
+    for(let i = 0; i < userArray.length; i++){//ダミーのAPIを探してヒットするとrateが上がる
       if(user_id == userArray[i].id){
         userArray[i].rate++;
       }
