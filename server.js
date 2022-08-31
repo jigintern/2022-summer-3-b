@@ -25,14 +25,6 @@ serve(async (req) => {
   const pathname = new URL(req.url).pathname;
   console.log(pathname);
 //マッチング開始API,完了かどうか知らせるAPI,マッチング完了APIは中身すべて同じ
-  if(req.method == "POST" && pathname === "/match_start"){//マッチング開始
-    const requestJson = await req.json();
-    matchinfo.taskname = requestJson.taskname;
-    if(requestJson.taskname == matchinfo.taskname){
-      return new Response(matchinfo.taskname);//とりあえずマッチング成功ならtasknameを返す
-    }
-    return new Response("取得エラー",{status:400});//エラー処理
-  }
   if(req.method == "POST" && pathname === "/match_bool"){//マッチング完了かどうか知らせるAPI
     const requestJson = await req.json();
     matchinfo.taskname = requestJson.taskname;
