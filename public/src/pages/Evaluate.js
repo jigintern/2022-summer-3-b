@@ -49,7 +49,6 @@ export const Evaluate = {
 
   methods: {
     favorite(userId) {
-      console.log(userId);
       fetch("/api/task/evalute", {
         method: "POST",
         body: JSON.stringify({ id: userId }),

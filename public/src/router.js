@@ -23,7 +23,12 @@ export const router = new VueRouter({
     { path: "/login", name: "login", component: Login },
     { path: "/matching", name: "matching", component: Matching, props: true },
     { path: "/task", name: "task", component: Task, props: true },
-    { path: "/upload-photo", name: "upload-photo", component: UploadPhoto },
+    {
+      path: "/upload-photo",
+      name: "upload-photo",
+      component: UploadPhoto,
+      props: true,
+    },
   ],
 });
 
