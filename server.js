@@ -6,15 +6,18 @@ class User  {
   id;
   rate;
   image;
-  constructor(name,id,rate,image){
+  habipower;
+  constructor(name,id,rate,image,habipower = 0){
     this.name = name;
     this.id = id;
     this.rate = rate;
     this.image = image;
+    this.habipower = habipower;
   }
 }
 const userArray = [];
-for(let i = 0; i<10;i++){
+const startlength = 10;//userArrayの初期化したときの大きさ
+for(let i = 0; i < startlength; i++){
   userArray.push(new User("user"+i,i,0,""));
 }
 function getRandomInt(max){
@@ -45,49 +48,46 @@ serve(async (req) => {
   if(req.method == "POST" && pathname === "/api/task/evalute"){//評価された回数を保存するAPI
     const requestJson = await req.json();
     const userid = requestJson.id;
-    for(let i = 0; i < userArray.length; i++){//ダミーのAPIを探してヒットするとrateが上がる
+    let userrate = 0;//評価された回数
+    let habipower = 0;//ハビパワー
+    let countrate = 0; //順位
+    let i = 0;
+    // const multi = Math.floor(Math.random()) + 1;//1～のランダムな数をかける
+
+    //ハビパワー計算部分↓
+    for(i = 0; i < userArray.length; i++){//ダミーのAPIを探してヒットするとrateが上がる
       if(userid == userArray[i].id){
         userArray[i].rate++;
-      }
-    }
-    return new Response();
-  }
-  if(req.method == "POST" && pathname === "/api/habipower"){
-    const requestJson = await req.json();
-    const userId = requestJson.id;
-    let countrate = 0;//順位
-    let habipower = 0;//ハビパワー(resの値)
-    let userrate = 0;
-    for (let m = 0; m < userArray.length; m++){//ユーザーのレートを探す
-      if(userId == userArray[m].id){
-        userrate = userArray[m].rate;
+        userrate = userArray[i].rate;
         break;
       }
     }
-
-    for(let i = 0; i < userArray.length; i++){//今回順位を表示するユーザーを探す
-      if(userId == userArray[i].id){
-        for(let j = 0; j < userArray.length; j++){//下に何人いるかカウントする
+    for(let j = 0; j < userArray.length; j++){//下に何人いるかカウントする
           if(userrate > userArray[j].rate){
             countrate++;
           }
         }
+    //カウントレートをどう使うか
+    habipower = userrate * (userArray.length - countrate) * 271.8;
+    (habipower).toFixed();
+    userArray[i-1].habipower = habipower;//ハビパワーの代入
+    return new Response();
+  }
+
+  if(req.method == "POST" && pathname === "/api/habipower"){//ハビパワーの表示
+    const requestJson = await req.json();
+    const userId = requestJson.id;
+    let habipower = 0;//ハビパワー(resの値)
+    if(userArray.length != startlength){
+     for (let m = 0; m < userArray.length; m++){//ユーザーのハビパワーを探す
+      if(userId == userArray[m].id){
+        habipower = userArray[m].habipower;
+        break;
       }
     }
-    // const maxrate = userrate;
-    // for(let k = 0; k < userArray.length; k++){
-    //   if(userrate < userArray[i].rate){
-    //     maxrate = userArray[i].rate;
-    //   }
-    // }
-    const multi = Math.floor(Math.random() * 10) + 1; 
-    habipower = userrate * multi;//レーティングの計算
-    if(habipower == 0 && userArray.length == 10){//最初の画面ではハビパワー0
-      habipower = 0;
+      const res = {"habipower" : habipower,"has_notifications" : true};
+      return new Response(JSON.stringify(res));
     }
-    (habipower).toFixed();//ハビパワー整数に四捨五入
-    const res = {"habipower" : habipower};
-    return new Response(JSON.stringify(res));
   }
 
   return serveDir(req, {
