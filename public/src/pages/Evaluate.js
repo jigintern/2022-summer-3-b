@@ -6,13 +6,24 @@ export const Evaluate = {
     <v-container>
       <v-row>
         <v-col cols="12">
-          <evaluate-item
-            v-if="evaluate"
-            :id="evaluate.id"
-            :name="evaluate.name"
-            :image="evaluate.image"
-            @favorite="favorite"
-          />
+
+          <v-card v-if="!evaluates.length">
+            <v-card-text>
+              評価する写真はありません
+            </v-card-text>
+          </v-card>
+
+          <v-list v-for="(e, i) in evaluates">
+
+            <evaluate-item
+              :key="i"
+              :name="e.userName"
+              :image="e.image"
+              @favorite="favorite(e.userId)"
+            />
+
+          </v-list>
+
         </v-col>
       </v-row>
     </v-container>
@@ -21,7 +32,7 @@ export const Evaluate = {
   components: { EvaluateItem },
 
   data() {
-    return { evaluate: null };
+    return { evaluates: [] };
   },
 
   async created() {
@@ -29,17 +40,19 @@ export const Evaluate = {
     const query = new URLSearchParams({ id: userId });
     const res = await fetch(`/api/task/evalute?${query}`);
 
-    this.evaluate = await res.json();
-    if (this.evaluate.image === "") {
-      this.evaluate.image = "/picture/IMG_1589.jpg";
+    const evaluates = await res.json();
+    for (const e of evaluates) {
+      e.image ||= "/picture/IMG_1589.jpg";
     }
+    this.evaluates = evaluates;
   },
 
   methods: {
-    favorite() {
+    favorite(userId) {
+      console.log(userId);
       fetch("/api/task/evalute", {
         method: "POST",
-        body: JSON.stringify({ id: this.evaluate.id }),
+        body: JSON.stringify({ id: userId }),
       });
     },
   },
