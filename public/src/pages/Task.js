@@ -1,33 +1,53 @@
 import { Timer } from "/src/components/Timer.js";
-// import { pending, poll, ready } from "/src/utils/polling.js";
 
 export const Task = {
   template: `
-    <v-container fill-height>
-      <v-row justify="center" align-content="center">
-        <v-col align="center" cols="10">
-          <v-card loading>
-            <template slot="progress">
-              <v-progress-linear :value="progress" />
-            </template>
-            <Timer :hour="0" :minute="0" :second="30" @progress="setProgress" @complete="complete" />
-          </v-card>
-        </v-col>
-        <v-col cols="10">
-          <v-card>
-            <v-card-title class="justify-center">
-              {{taskName}}
-            </v-card-title>
-            <v-card-actions>
-              <v-spacer />
-              <v-btn color="primary" @click="complete" depressed>完了</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-col>
-        <v-col align="center" cols="12">
-        </v-col>
-      </v-row>
-    </v-container>
+    <div class="d-flex flex-column fill-height">
+
+      <v-card flat tile>
+        <div
+          class="justify-center"
+          style="height: auto; background-color: black;"
+        >
+          <video
+            ref="video"
+            class="d-flex ma-auto"
+            style="max-width: 100%; max-height: 50vh; height: auto;"
+          />
+        </div>
+
+        <v-card-actions class="d-flex flex-row">
+          タスク
+          <v-spacer />
+          <v-btn icon @click="flip">
+            <v-icon>mdi-camera-flip-outline</v-icon>
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+
+      <v-divider />
+
+      <v-card flat tile>
+
+        <Timer :hour="0" :minute="0" :second="30" @progress="setProgress" />
+        <v-progress-linear :value="progress" class="my-5" />
+
+        <v-divider />
+
+        <v-card-title>
+          <v-spacer />
+            <span class="text-h5">{{taskName}}</span>
+          <v-spacer />
+        </v-card-title>
+
+        <v-card-actions class="d-flex ma-4">
+          <v-spacer />
+            <v-btn color="primary" @click="complete" large>完了</v-btn>
+          <v-spacer />
+        </v-card-actions>
+
+      </v-card>
+    </div>
   `,
 
   components: {
@@ -40,32 +60,55 @@ export const Task = {
       required: true,
       default: "タスク名",
     },
+    connection: { required: true },
+    relatedUserId: {
+      type: String,
+      required: true,
+    },
+    ws: {
+      type: WebSocket,
+      required: true,
+    },
+    localStream: {
+      required: false,
+    },
   },
 
   data() {
     return {
       progress: 100,
+      useRemoteStream: true,
+      remoteStream: null,
     };
   },
 
-  async created() {
-    // // 5秒間隔でポーリング
-    // // 間隔は適当
-    // const waitSec = 5000;
-    // const res = await poll(waitSec, async () => {
-    //   const res = await fetch("/api/task/terminated", { method: "POST" });
-    //   const json = await res.json();
-    //   return json.terminated ? ready(null) : pending();
-    // });
+  created() {
+    this.ws.onclose = () => this.$router.push({ name: "upload-photo" });
+  },
+
+  mounted() {
+    const video = this.$refs.video;
+    this.connection.on("stream", (stream) => {
+      this.remoteStream = stream;
+      video.srcObject ??= stream;
+      video.play();
+    });
   },
 
   methods: {
     complete() {
-      // fetch("/api/task/complete", { method: "POST" });
-      this.$router.push({ name: "upload-photo" });
+      this.ws.close();
     },
     setProgress(progress) {
       this.progress = progress;
+    },
+    flip() {
+      const video = this.$refs.video;
+      this.useRemoteStream = !this.useRemoteStream;
+      video.srcObject = this.useRemoteStream
+        ? this.localStream
+        : this.remoteStream;
+      video.play();
     },
   },
 };
