@@ -85,10 +85,10 @@ serve(async (req) => {
         break;
       }
     }
+  }
       const res = {"habipower" : habipower,"has_notifications" : true};
       return new Response(JSON.stringify(res));
-    }
-  }
+}
 
   return serveDir(req, {
     fsRoot: "public",
