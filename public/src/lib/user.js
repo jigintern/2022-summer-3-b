@@ -33,4 +33,7 @@ export const registerUserInfo = async (userName) => {
 
   const body = JSON.stringify({ name: userName, id: userId });
   await fetch("/api/user/resist", { method: "POST", body });
+
+  Cookies.set(COOKIE_KEY.USER_NAME, userName, { expires: 7 });
+  Cookies.set(COOKIE_KEY.USER_ID, userId, { expires: 7 });
 };
