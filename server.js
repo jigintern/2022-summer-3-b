@@ -13,10 +13,6 @@ class User  {
     this.image = image;
   }
 }
-class Habipower_response{
-  id;
-  rate;
-}
 const userArray = [];
 for(let i = 0; i<10;i++){
   userArray.push(new User("user"+i,i,0,""));
