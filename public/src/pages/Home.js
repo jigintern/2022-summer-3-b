@@ -9,7 +9,7 @@ export const Home = {
         <router-view />
       </v-main>
 
-      <home-bottom-navi notifyEvaluate />
+      <home-bottom-navi :notifyEvaluate="hasNotifications" />
 
     </div>
   `,
@@ -23,6 +23,7 @@ export const Home = {
     return {
       taskName: "",
       habipower: null,
+      hasNotifications: false,
     };
   },
 
@@ -34,6 +35,7 @@ export const Home = {
     const res = await fetch("/api/habipower", { method: "POST", body });
     const json = await res.json();
     this.habipower = json.habipower;
+    this.hasNotifications = json.has_notifications;
   },
 
   methods: {
