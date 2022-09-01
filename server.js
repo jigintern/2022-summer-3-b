@@ -54,12 +54,19 @@ serve(async (req) => {
   }
   if(req.method == "POST" && pathname === "/api/habipower"){
     const requestJson = await req.json();
-    const userid = requestJson.id;
-    const userrate = requestJson.rate;
-    let countrate = 0;
-    let habipower = 0;
+    const userId = requestJson.id;
+    let countrate = 0;//順位
+    let habipower = 0;//ハビパワー(resの値)
+    const userrate = 0;
+    for (let m = 0; m < userArray.length; m++){//ユーザーのレートを探す
+      if(userId == userArray[m].id){
+        userrate = userArray[m].rate;
+        break;
+      }
+    }
+
     for(let i = 0; i < userArray.length; i++){//今回順位を表示するユーザーを探す
-      if(userid == userArray[i].id){
+      if(userId == userArray[i].id){
         for(let j = 0; j < userArray.length; j++){//下に何人いるかカウントする
           if(userrate > userArray[j].rate){
             countrate++;
@@ -67,12 +74,22 @@ serve(async (req) => {
         }
       }
     }
-    habipower = countrate * 256;//ハビパワーのロジック後で考える
-    if(countrate == 0){
-      habipower = 256 - 56;
+    // const maxrate = userrate;
+    // for(let k = 0; k < userArray.length; k++){
+    //   if(userrate < userArray[i].rate){
+    //     maxrate = userArray[i].rate;
+    //   }
+    // }
+    const multi = Math.floor(Math.random() * 10) + 1; 
+    habipower = userrate * multi;//レーティングの計算
+    if(habipower == 0 && userArray.length == 10){//最初の画面ではハビパワー0
+      habipower = 0;
     }
-    return new Response(habipower);
+    (habipower).toFixed();//ハビパワー整数に四捨五入
+    const res = {"habipower" : habipower};
+    return new Response(JSON.stringify(res));
   }
+
   return serveDir(req, {
     fsRoot: "public",
     urlRoot: "",
