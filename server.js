@@ -5,23 +5,29 @@ class User  {
   name;
   id;
   rate;
-  image;
   habipower;
-  constructor(name,id,rate,image,habipower = 0){
+  constructor(name,id,rate,habipower = 0){
     this.name = name;
     this.id = id;
     this.rate = rate;
-    this.image = image;
     this.habipower = habipower;
   }
 }
+class Task {
+  user_id;
+  image;
+  related_user_id;
+  constructor(user_id,related_user_id,image){
+    this.user_id = user_id;
+    this.related_user_id = related_user_id;
+    this.image = image;
+  }
+}
 const userArray = [];
+const taskArray = [];
 const startlength = 10;//userArrayの初期化したときの大きさ
 for(let i = 0; i < startlength; i++){
   userArray.push(new User("user"+i,i,0,""));
-}
-function getRandomInt(max){
-  return Math.floor(Math.random() * max);
 }
 
 serve(async (req) => {
@@ -38,11 +44,24 @@ serve(async (req) => {
     const requestJson = await req.json();
     const image = requestJson.image;//画像のバイナリデータを受け取る
     const userId = requestJson.id;
-    userArray.push(new User("user" + id, userId,image))
+    const relatedUserId = requestJson.related_user_id;
+    taskArray.push(new Task(userId,relatedUserId,image));
     return new Response();//そのまま返す
   }
   if(req.method == "GET" && pathname === "/api/task/evalute"){//評価する相手をランダムで表示
-    const user = userArray[getRandomInt(userArray.length)];
+    const requestJson = await req.json();
+    const userId = requestJson.id;
+    const userName = "";
+    const userImage = "";
+    for(let i = 0; i < userArray.length; i++){
+      if(userId == userArray[i].id){
+        userName = userArray[i].name;
+      }
+      if(userId == taskArray[i].user_id){
+        userImage = taskArray[i].image;
+      }
+    }
+    const user = {"userId":userId,"userName":userName,"userImage":userImage}
     return new Response(JSON.stringify(user));
   }
   if(req.method == "POST" && pathname === "/api/task/evalute"){//評価された回数を保存するAPI
@@ -89,7 +108,13 @@ serve(async (req) => {
       const res = {"habipower" : habipower,"has_notifications" : true};
       return new Response(JSON.stringify(res));
 }
-
+  if(req.method == "POST" && pathname === "/api/user/resist"){//ゆーざーとうろくAPI
+    const requestJson = await req.json();
+    const userName = requestJson.name;
+    const userId = requestJson.id;
+    userArray.push(new User(userName,userId));    
+    return new Response();
+  }
   return serveDir(req, {
     fsRoot: "public",
     urlRoot: "",
