@@ -1,3 +1,4 @@
+import { getUserInfo } from "../lib/user.js";
 import { Habipower } from "/src/components/Habipower.js";
 
 export const MainMenu = {
@@ -45,9 +46,7 @@ export const MainMenu = {
   },
 
   async created() {
-    // 仮のuser id
-    const userId = Math.floor(Math.random() * 10);
-
+    const userId = getUserInfo().userId;
     const body = JSON.stringify({ id: userId });
     const res = await fetch("/api/habipower", { method: "POST", body });
     const json = await res.json();

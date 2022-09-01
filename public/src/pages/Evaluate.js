@@ -1,3 +1,4 @@
+import { getUserInfo } from "/src/lib/user.js";
 import { EvaluateItem } from "/src/components/EvaluateItem.js";
 
 export const Evaluate = {
@@ -24,7 +25,10 @@ export const Evaluate = {
   },
 
   async created() {
-    const res = await fetch("/api/task/evalute");
+    const userId = getUserInfo().userId;
+    const query = new URLSearchParams({ id: userId });
+    const res = await fetch(`/api/task/evalute?${query}`);
+
     this.evaluate = await res.json();
     if (this.evaluate.image === "") {
       this.evaluate.image = "/picture/IMG_1589.jpg";
