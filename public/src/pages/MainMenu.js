@@ -1,22 +1,40 @@
 import { Habipower } from "/src/components/Habipower.js";
-import { HomeBottomNavi } from "/src/components/HomeBottomNavi.js";
 
-export const Home = {
+export const MainMenu = {
   template: `
-    <div class="fill-height">
+    <v-container fill-height>
 
-      <v-main class="fill-height">
-        <router-view />
-      </v-main>
+      <v-row justify="center" >
+        <v-col align="center" cols="10">
+          <v-text-field
+            v-model="taskName"
+            :rules="[v => !!v || 'タスク名は必須です']"
+            label="タスク名を入力"
+          />
+        </v-col>
 
-      <home-bottom-navi notifyEvaluate />
+        <v-col align="center" cols="12">
+          <v-btn
+            :disabled="invalidTaskName"
+            color="primary"
+            @click="startMatching"
+          >マッチング開始</v-btn>
+        </v-col>
 
-    </div>
+      <v-col cols="12">
+        <v-divider />
+      </v-col>
+
+        <v-col cols="10">
+          <habipower :value="habipower" />
+        </v-col>
+      </v-row>
+
+    </v-container>
   `,
 
   components: {
     Habipower,
-    HomeBottomNavi,
   },
 
   data() {

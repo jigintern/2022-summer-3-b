@@ -13,8 +13,6 @@ export const Evaluate = {
             @favorite="favorite"
           />
         </v-col>
-        <v-col cols="12"> <v-btn @click="jumpToHome">ホームに戻る</v-btn>
-        </v-col>
       </v-row>
     </v-container>
   `,
@@ -39,10 +37,6 @@ export const Evaluate = {
         method: "POST",
         body: JSON.stringify({ id: this.evaluate.id }),
       });
-    },
-
-    jumpToHome() {
-      this.$router.replace({ name: "home" });
     },
   },
 };
