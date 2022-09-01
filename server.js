@@ -55,8 +55,8 @@ serve(async (req) => {
   if(req.method == "POST" && pathname === "/api/habipower"){
     const requestJson = await req.json();
     const userId = requestJson.id;
-    const countrate = 0;//順位
-    const habipower = 0;//ハビパワー(resの値)
+    let countrate = 0;//順位
+    let habipower = 0;//ハビパワー(resの値)
     const userrate = 0;
     for (let m = 0; m < userArray.length; m++){//ユーザーのレートを探す
       if(userId == userArray[m].id){
@@ -64,6 +64,7 @@ serve(async (req) => {
         break;
       }
     }
+
     for(let i = 0; i < userArray.length; i++){//今回順位を表示するユーザーを探す
       if(userId == userArray[i].id){
         for(let j = 0; j < userArray.length; j++){//下に何人いるかカウントする
