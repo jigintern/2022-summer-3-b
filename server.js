@@ -23,7 +23,11 @@ class Task {
     this.image = image;
   }
 }
+
+/** @type { User[] } */
 const userArray = [];
+
+/** @type { Task[] } */
 const taskArray = [];
 const startlength = 10;//userArrayの初期化したときの大きさ
 for(let i = 0; i < startlength; i++){
@@ -49,20 +53,15 @@ serve(async (req) => {
     return new Response();//そのまま返す
   }
   if(req.method == "GET" && pathname === "/api/task/evalute"){//評価する相手をランダムで表示
-    const requestJson = await req.json();
-    const userId = requestJson.id;
-    const userName = "";
-    const userImage = "";
-    for(let i = 0; i < userArray.length; i++){
-      if(userId == userArray[i].id){
-        userName = userArray[i].name;
-      }
-      if(userId == taskArray[i].user_id){
-        userImage = taskArray[i].image;
-      }
-    }
-    const user = {"userId":userId,"userName":userName,"userImage":userImage}
-    return new Response(JSON.stringify(user));
+    const query = new URL(req.url).searchParams;
+    const targetUserId = query.get("id");
+    const res = taskArray
+      .filter((task) => task.user_id === targetUserId)
+      .map(({ related_user_id, image }) => {
+        const userName = userArray.find(user=> user.id == related_user_id).name;
+        return { userId: related_user_id, userName, image };
+      });
+    return new Response(JSON.stringify(res));
   }
   if(req.method == "POST" && pathname === "/api/task/evalute"){//評価された回数を保存するAPI
     const requestJson = await req.json();
