@@ -56,8 +56,8 @@ serve(async (req) => {
     const requestJson = await req.json();
     const userid = requestJson.id;
     const userrate = requestJson.rate;
-    const countrate = 0;
-    const habipower = 0;
+    let countrate = 0;
+    let habipower = 0;
     for(let i = 0; i < userArray.length; i++){//今回順位を表示するユーザーを探す
       if(userid == userArray[i].id){
         for(let j = 0; j < userArray.length; j++){//下に何人いるかカウントする
