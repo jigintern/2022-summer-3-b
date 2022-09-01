@@ -1,4 +1,5 @@
 import { Camera } from "../components/Camera.js";
+import { getUserInfo } from "../lib/user.js";
 
 export const UploadPhoto = {
   template: `
@@ -6,8 +7,8 @@ export const UploadPhoto = {
       <v-row fill-height justify="center" align-content="center">
         <v-col align="center" cols="10">
 
-          <v-card v-if="captured">
-            <v-img :src="captured.data" style="width:100%;"/>
+          <v-card v-if="imageData">
+            <v-img :src="imageData.data" style="width:100%;"/>
             <v-card-actions>
               <v-btn @click="retry">撮り直し</v-btn>
               <v-spacer />
@@ -26,21 +27,34 @@ export const UploadPhoto = {
 
   components: { Camera },
 
+  props: {
+    relatedUserId: {
+      type: String,
+      required: true,
+    },
+  },
+
   data() {
     return {
       width: 500,
-      captured: null,
+      imageData: null,
     };
   },
 
   methods: {
     capture(e) {
-      this.captured = e;
+      this.imageData = e;
     },
     retry() {
-      this.captured = null;
+      this.imageData = null;
     },
-    send() {
+    async send() {
+      const body = JSON.stringify({
+        image: this.imageData.data,
+        id: getUserInfo().userId,
+        related_user_id: this.relatedUserId,
+      });
+      await fetch("/get_image", { method: "POST", body });
       this.$router.go(-3);
     },
   },

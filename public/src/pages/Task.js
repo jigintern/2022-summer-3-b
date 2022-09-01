@@ -83,7 +83,12 @@ export const Task = {
   },
 
   created() {
-    this.ws.onclose = () => this.$router.push({ name: "upload-photo" });
+    this.ws.onclose = () => {
+      this.$router.push({
+        name: "upload-photo",
+        params: { relatedUserId: this.relatedUserId },
+      });
+    };
   },
 
   mounted() {
