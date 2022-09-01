@@ -81,8 +81,8 @@ serve(async (req) => {
         break;
       }
     }
-    for(let j = 0; j < userArray.length; j++){//下に何人いるかカウントする
-          if(userrate > userArray[j].rate){
+    for(let j = 0; j < userArray.length; j++){//順位
+          if(userrate < userArray[j].rate){
             countrate++;
           }
         }
