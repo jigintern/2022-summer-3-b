@@ -1,4 +1,6 @@
-/** @typedef { { userName: string, userId: string } } UserInfo */
+/**
+ * @typedef { { userName: string, userId: string } } UserInfo
+ */
 
 const COOKIE_KEY = {
   USER_NAME: "USER_NAME",
@@ -8,7 +10,7 @@ const COOKIE_KEY = {
 /** @type { null | UserInfo } */
 let userInfo = null;
 
-/** @returns { UserInfo | null } */
+/** @returns { null | UserInfo } */
 export const getUserInfo = () => {
   if (userInfo !== null) {
     return userInfo;
@@ -25,9 +27,10 @@ export const getUserInfo = () => {
   return null;
 };
 
-/** @param { UserInfo } info */
-export const setUserInfo = (info) => {
-  userInfo = info;
-  Cookies.set(COOKIE_KEY.USER_NAME, info.userName);
-  Cookies.set(COOKIE_KEY.USER_ID, info.userId);
+export const registerUserInfo = async (userName) => {
+  const userId = window.crypto.randomUUID();
+  userInfo = { userName, userId };
+
+  const body = JSON.stringify({ name: userName, id: userId });
+  await fetch("/api/user/resist", { method: "POST", body });
 };

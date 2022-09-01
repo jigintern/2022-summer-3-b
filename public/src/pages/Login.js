@@ -1,4 +1,4 @@
-import { setUserInfo } from "../store.js";
+import { registerUserInfo } from "/src/lib/user.js";
 
 export const Login = {
   template: `
@@ -49,13 +49,8 @@ export const Login = {
   methods: {
     async createUser() {
       this.registering = true;
-      const userId = window.crypto.randomUUID();
-      const userInfo = { userName: this.userName, userId };
 
-      const body = JSON.stringify(userInfo);
-      await fetch("/api/user/resist", { method: "POST", body });
-
-      setUserInfo(userInfo);
+      await registerUserInfo(this.userName);
 
       this.$router.replace({ name: "home" });
     },

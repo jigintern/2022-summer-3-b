@@ -6,7 +6,7 @@ import { UploadPhoto } from "./pages/UploadPhoto.js";
 import { Evaluate } from "./pages/Evaluate.js";
 import { MainMenu } from "./pages/MainMenu.js";
 
-import { getUserInfo } from "./store.js";
+import { getUserInfo } from "/src/lib/user.js";
 
 export const router = new VueRouter({
   routes: [
