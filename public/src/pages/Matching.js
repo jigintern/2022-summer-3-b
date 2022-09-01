@@ -1,4 +1,4 @@
-import { startMatching } from "/src/peer/matching.js";
+import { connect } from "/src/lib/p2p.js";
 
 export const Matching = {
   template: `
@@ -22,13 +22,15 @@ export const Matching = {
   },
 
   async created() {
-    const connection = await startMatching();
+    const { connection, relatedUserId, ws } = await connect();
 
     this.$router.push({
       name: "task",
       params: {
         taskName: this.taskName,
         connection,
+        relatedUserId,
+        ws,
       },
     });
   },

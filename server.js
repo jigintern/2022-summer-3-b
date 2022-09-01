@@ -1,10 +1,7 @@
 import { serve } from "https://deno.land/std@0.151.0/http/server.ts";
 import { serveDir } from "https://deno.land/std@0.151.0/http/file_server.ts";
 
-import { Matching } from "./src/matching.js";
-
-// '/api/match/start'で使用
-const matching = new Matching();
+import { serveWebSocket } from "./src/matching.ts";
 
 class User  {
   name;
@@ -119,12 +116,7 @@ serve(async (req) => {
     userArray.push(new User(userName,userId));    
     return new Response();
   }
-  if(req.method == "POST" && pathname == "/api/matching/start") {
-    const requestJson = await req.json();
-    const peerId = requestJson.peerId;
-    const res = { peerId: matching.match(peerId) };
-    return new Response(JSON.stringify(res));
-  }
+
   return serveDir(req, {
     fsRoot: "public",
     urlRoot: "",
@@ -132,3 +124,5 @@ serve(async (req) => {
     enableCors: true,
   });
 });
+
+serveWebSocket();

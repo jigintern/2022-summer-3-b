@@ -1,5 +1,4 @@
 import { Timer } from "/src/components/Timer.js";
-// import { pending, poll, ready } from "/src/utils/polling.js";
 
 export const Task = {
   template: `
@@ -10,7 +9,7 @@ export const Task = {
             <template slot="progress">
               <v-progress-linear :value="progress" />
             </template>
-            <Timer :hour="1" :minute="0" :second="30" @progress="setProgress" @complete="complete" />
+            <Timer :hour="1" :minute="0" :second="30" @progress="setProgress" />
           </v-card>
         </v-col>
         <v-col cols="10">
@@ -41,7 +40,13 @@ export const Task = {
       required: true,
       default: "タスク名",
     },
-    connection: {
+    connection: { required: true },
+    relatedUserId: {
+      type: String,
+      required: true,
+    },
+    ws: {
+      type: WebSocket,
       required: true,
     },
   },
@@ -53,31 +58,19 @@ export const Task = {
   },
 
   created() {
-    // // 5秒間隔でポーリング
-    // // 間隔は適当
-    // const waitSec = 5000;
-    // const res = await poll(waitSec, async () => {
-    //   const res = await fetch("/api/task/terminated", { method: "POST" });
-    //   const json = await res.json();
-    //   return json.terminated ? ready(null) : pending();
-    // });
+    this.ws.onclose = () => this.$router.push({ name: "upload-photo" });
   },
+
   mounted() {
     this.connection.on("stream", (stream) => {
-      console.log(stream);
       this.$refs.video.srcObject = stream;
       this.$refs.video.play();
     });
   },
 
-  unmounted() {
-    this.connection.close(true);
-  },
-
   methods: {
     complete() {
-      // fetch("/api/task/complete", { method: "POST" });
-      this.$router.push({ name: "upload-photo" });
+      this.ws.close();
     },
     setProgress(progress) {
       this.progress = progress;
