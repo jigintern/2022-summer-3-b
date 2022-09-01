@@ -57,7 +57,7 @@ serve(async (req) => {
     const userId = requestJson.id;
     let countrate = 0;//順位
     let habipower = 0;//ハビパワー(resの値)
-    const userrate = 0;
+    let userrate = 0;
     for (let m = 0; m < userArray.length; m++){//ユーザーのレートを探す
       if(userId == userArray[m].id){
         userrate = userArray[m].rate;
