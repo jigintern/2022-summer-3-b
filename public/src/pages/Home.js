@@ -1,36 +1,44 @@
+import { Habipower } from "/src/components/Habipower.js";
+import { HomeBottomNavi } from "/src/components/HomeBottomNavi.js";
+
 export const Home = {
   template: `
-    <v-container fill-height>
+    <div class="fill-height">
 
-      <v-row justify="center" align-content="center">
-        <v-col align="center" cols="10">
-          <v-text-field
-            v-model="taskName"
-            :rules="[v => !!v || 'タスク名は必須です']"
-            label="タスク名を入力"
-          />
-        </v-col>
+      <v-main class="fill-height">
+        <router-view />
+      </v-main>
 
-        <v-col align="center" cols="12">
-          <v-btn @click="jumpToEvaluate">評価画面へ</v-btn>
-          <v-btn
-            :disabled="invalidTaskName"
-            color="primary"
-            @click="startMatching"
-          >マッチング開始</v-btn>
-        </v-col>
-      </v-row>
+      <home-bottom-navi :notifyEvaluate="hasNotifications" />
 
-    </v-container>
+    </div>
   `,
+
+  components: {
+    Habipower,
+    HomeBottomNavi,
+  },
+
   data() {
-    return { taskName: "" };
+    return {
+      taskName: "",
+      habipower: null,
+      hasNotifications: false,
+    };
+  },
+
+  async created() {
+    // 仮のuser id
+    const userId = Math.floor(Math.random() * 10);
+
+    const body = JSON.stringify({ id: userId });
+    const res = await fetch("/api/habipower", { method: "POST", body });
+    const json = await res.json();
+    this.habipower = json.habipower;
+    this.hasNotifications = json.has_notifications;
   },
 
   methods: {
-    jumpToEvaluate() {
-      this.$router.replace("evaluate");
-    },
     startMatching() {
       this.$router.push({
         name: "matching",

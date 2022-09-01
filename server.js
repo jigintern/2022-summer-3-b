@@ -10,20 +10,33 @@ class User  {
   name;
   id;
   rate;
-  image;
-  constructor(name,id,rate,image){
+  habipower;
+  constructor(name,id,rate,habipower = 0){
     this.name = name;
     this.id = id;
     this.rate = rate;
+    this.habipower = habipower;
+  }
+}
+class Task {
+  user_id;
+  image;
+  related_user_id;
+  constructor(user_id,related_user_id,image){
+    this.user_id = user_id;
+    this.related_user_id = related_user_id;
     this.image = image;
   }
 }
+
+/** @type { User[] } */
 const userArray = [];
-for(let i = 0; i<10;i++){
+
+/** @type { Task[] } */
+const taskArray = [];
+const startlength = 10;//userArrayの初期化したときの大きさ
+for(let i = 0; i < startlength; i++){
   userArray.push(new User("user"+i,i,0,""));
-}
-function getRandomInt(max){
-  return Math.floor(Math.random() * max);
 }
 
 serve(async (req) => {
@@ -40,43 +53,71 @@ serve(async (req) => {
     const requestJson = await req.json();
     const image = requestJson.image;//画像のバイナリデータを受け取る
     const userId = requestJson.id;
-    userArray.push(new User("user" + id, userId,image))
+    const relatedUserId = requestJson.related_user_id;
+    taskArray.push(new Task(userId,relatedUserId,image));
     return new Response();//そのまま返す
   }
   if(req.method == "GET" && pathname === "/api/task/evalute"){//評価する相手をランダムで表示
-    const user = userArray[getRandomInt(userArray.length)];
-    return new Response(JSON.stringify(user));
+    const query = new URL(req.url).searchParams;
+    const targetUserId = query.get("id");
+    const res = taskArray
+      .filter((task) => task.user_id === targetUserId)
+      .map(({ related_user_id, image }) => {
+        const userName = userArray.find(user=> user.id == related_user_id).name;
+        return { userId: related_user_id, userName, image };
+      });
+    return new Response(JSON.stringify(res));
   }
   if(req.method == "POST" && pathname === "/api/task/evalute"){//評価された回数を保存するAPI
     const requestJson = await req.json();
     const userid = requestJson.id;
-    for(let i = 0; i < userArray.length; i++){//ダミーのAPIを探してヒットするとrateが上がる
+    let userrate = 0;//評価された回数
+    let habipower = 0;//ハビパワー
+    let countrate = 0; //順位
+    let i = 0;
+    // const multi = Math.floor(Math.random()) + 1;//1～のランダムな数をかける
+
+    //ハビパワー計算部分↓
+    for(i = 0; i < userArray.length; i++){//ダミーのAPIを探してヒットするとrateが上がる
       if(userid == userArray[i].id){
         userArray[i].rate++;
+        userrate = userArray[i].rate;
+        break;
       }
     }
-    return new Response();
-  }
-  if(req.method == "POST" && pathname === "/api/habipower"){
-    const requestJson = await req.json();
-    const userid = requestJson.id;
-    const userrate = requestJson.rate;
-    const countrate = 0;
-    const habipower = 0;
-    for(let i = 0; i < userArray.length; i++){//今回順位を表示するユーザーを探す
-      if(userid == userArray[i].id){
-        for(let j = 0; j < userArray.length; j++){//下に何人いるかカウントする
-          if(userrate > userArray[j].rate){
+    for(let j = 0; j < userArray.length; j++){//順位
+          if(userrate < userArray[j].rate){
             countrate++;
           }
         }
+    //カウントレートをどう使うか
+    habipower = userrate * (userArray.length - countrate) * 271.8;
+    (habipower).toFixed();
+    userArray[i-1].habipower = habipower;//ハビパワーの代入
+    return new Response();
+  }
+
+  if(req.method == "POST" && pathname === "/api/habipower"){//ハビパワーの表示
+    const requestJson = await req.json();
+    const userId = requestJson.id;
+    let habipower = 0;//ハビパワー(resの値)
+    if(userArray.length != startlength){
+     for (let m = 0; m < userArray.length; m++){//ユーザーのハビパワーを探す
+      if(userId == userArray[m].id){
+        habipower = userArray[m].habipower;
+        break;
       }
     }
-    habipower = countrate * 256;//ハビパワーのロジック後で考える
-    if(countrate == 0){
-      habipower = 256 - 56;
-    }
-    return new Response(habipower);
+  }
+      const res = {"habipower" : habipower,"has_notifications" : true};
+      return new Response(JSON.stringify(res));
+}
+  if(req.method == "POST" && pathname === "/api/user/resist"){//ゆーざーとうろくAPI
+    const requestJson = await req.json();
+    const userName = requestJson.name;
+    const userId = requestJson.id;
+    userArray.push(new User(userName,userId));    
+    return new Response();
   }
   if(req.method == "POST" && pathname == "/api/matching/start") {
     const requestJson = await req.json();
