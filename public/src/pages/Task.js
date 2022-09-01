@@ -10,7 +10,7 @@ export const Task = {
             <template slot="progress">
               <v-progress-linear :value="progress" />
             </template>
-            <Timer :hour="0" :minute="0" :second="30" @progress="setProgress" @complete="complete" />
+            <Timer :hour="1" :minute="0" :second="30" @progress="setProgress" @complete="complete" />
           </v-card>
         </v-col>
         <v-col cols="10">
@@ -27,6 +27,7 @@ export const Task = {
         <v-col align="center" cols="12">
         </v-col>
       </v-row>
+      <video ref="video"/>
     </v-container>
   `,
 
@@ -40,6 +41,9 @@ export const Task = {
       required: true,
       default: "タスク名",
     },
+    connection: {
+      required: true,
+    },
   },
 
   data() {
@@ -48,7 +52,7 @@ export const Task = {
     };
   },
 
-  async created() {
+  created() {
     // // 5秒間隔でポーリング
     // // 間隔は適当
     // const waitSec = 5000;
@@ -57,6 +61,17 @@ export const Task = {
     //   const json = await res.json();
     //   return json.terminated ? ready(null) : pending();
     // });
+  },
+  mounted() {
+    this.connection.on("stream", (stream) => {
+      console.log(stream);
+      this.$refs.video.srcObject = stream;
+      this.$refs.video.play();
+    });
+  },
+
+  unmounted() {
+    this.connection.close(true);
   },
 
   methods: {

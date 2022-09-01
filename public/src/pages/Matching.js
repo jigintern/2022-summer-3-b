@@ -1,4 +1,4 @@
-// import { pending, poll, ready } from "/src/utils/polling.js";
+import { startMatching } from "/src/peer/matching.js";
 
 export const Matching = {
   template: `
@@ -22,25 +22,13 @@ export const Matching = {
   },
 
   async created() {
-    // マッチ開始
-    // await fetch("/api/matching/start");
-
-    // // 3秒間隔でポーリング
-    // // 間隔は適当
-    // const waitSec = 3000;
-    // const res = await poll(waitSec, async () => {
-    //   const res = await fetch("/api/matching/matched", { method: "POST" });
-    //   const json = await res.json();
-    //   return json.username ? ready(json) : pending();
-    // });
-
-    // マッチ開始までブロック
-    await new Promise((resolve) => setTimeout(resolve, 3000));
+    const connection = await startMatching();
 
     this.$router.push({
       name: "task",
       params: {
         taskName: this.taskName,
+        connection,
       },
     });
   },
