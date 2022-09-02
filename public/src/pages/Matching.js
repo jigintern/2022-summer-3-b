@@ -1,4 +1,5 @@
 import { connect } from "/src/lib/p2p.js";
+import { getUserInfo } from "../lib/user.js";
 
 export const Matching = {
   template: `
@@ -19,6 +20,13 @@ export const Matching = {
       type: String,
       required: true,
     },
+  },
+
+  async destroyed() {
+    await fetch("/api/matching/cancel", {
+      method: "POST",
+      body: JSON.stringify({ userId: getUserInfo().userId }),
+    });
   },
 
   async created() {
