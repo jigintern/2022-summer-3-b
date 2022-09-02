@@ -4,7 +4,7 @@ import { getUserInfo } from "./user.js";
 import { deferred } from "/src/utils/deferred.js";
 
 const API_KEY = "8ad75983-eae7-4d73-b97f-37cbddc59d06";
-const WS_PROTOCOL = document.domain === "localhost" ? "ws" : "wss";
+const WS_PROTOCOL = "ws";
 const WS_PORT = 8000;
 const WS_ENDPOINT = `${WS_PROTOCOL}://${document.domain}:${WS_PORT}`;
 
