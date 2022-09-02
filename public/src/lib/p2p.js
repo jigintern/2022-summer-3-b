@@ -46,6 +46,7 @@ export const connect = async () => {
 
   const ws = new WebSocket(WS_ENDPOINT);
   ws.addEventListener("close", () => peer.destroy());
+  ws.onerror = (e) => console.error(e);
   ws.onmessage = (e) => {
     const { userId, remoteId, call } = JSON.parse(e.data);
     resolveRelatedUserId(userId);
