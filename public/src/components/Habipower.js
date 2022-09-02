@@ -3,7 +3,7 @@ export const Habipower = {
     <v-card>
 
       <v-card-title>
-        あなたのハビパワー
+        あなたのHabiPower
       </v-card-title>
 
       <v-card-text>
