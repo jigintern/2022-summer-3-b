@@ -37,6 +37,11 @@ for(let i = 0; i < startlength; i++){
 }
 
 serve(async (req) => {
+  const res = serveWebSocket(req);
+  if(res) {
+    return res;
+  }
+
   const pathname = new URL(req.url).pathname;
   console.log(pathname);
 
@@ -124,5 +129,3 @@ serve(async (req) => {
     enableCors: true,
   });
 });
-
-serveWebSocket();

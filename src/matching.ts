@@ -155,26 +155,24 @@ class Rooms {
   }
 }
 
-export const serveWebSocket = () => {
-  const rooms = new Rooms();
+const rooms = new Rooms();
 
-  return serve((req) => {
-    if (req.headers.get("upgrade") != "websocket") { // WebSocketの要求でない
-      return new Response(null, { status: 501 });
-    }
+export const serveWebSocket = (req: Request): Response | null => {
+  if (req.headers.get("upgrade") != "websocket") { // WebSocketの要求でない
+    return null;
+  }
 
-    const { socket: ws, response } = Deno.upgradeWebSocket(req);
-    ws.onerror = console.error;
-    ws.onmessage = (e) => {
-      const id = JSON.parse(e.data);
-      const userId = new UserId(id.userId);
-      const peerId = new PeerId(id.peerId);
-      const user = { userId, peerId, ws };
+  const { socket: ws, response } = Deno.upgradeWebSocket(req);
+  ws.onerror = console.error;
+  ws.onmessage = (e) => {
+    const id = JSON.parse(e.data);
+    const userId = new UserId(id.userId);
+    const peerId = new PeerId(id.peerId);
+    const user = { userId, peerId, ws };
 
-      const roomId = rooms.join(user);
-      ws.onclose = () => rooms.quit(roomId, userId);
-    };
+    const roomId = rooms.join(user);
+    ws.onclose = () => rooms.quit(roomId, userId);
+  };
 
-    return response;
-  }, { port: 5000 });
+  return response;
 };
