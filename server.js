@@ -1,7 +1,7 @@
 import { serve } from "https://deno.land/std@0.151.0/http/server.ts";
 import { serveDir } from "https://deno.land/std@0.151.0/http/file_server.ts";
 
-import { serveWebSocket } from "./src/matching.ts";
+import { serveMatching } from "./src/matching.ts";
 
 class User  {
   name;
@@ -37,13 +37,13 @@ for(let i = 0; i < startlength; i++){
 }
 
 serve(async (req) => {
-  const res = serveWebSocket(req);
+  const pathname = new URL(req.url).pathname;
+  console.log(pathname);
+
+  const res = await serveMatching(req);
   if(res) {
     return res;
   }
-
-  const pathname = new URL(req.url).pathname;
-  console.log(pathname);
 
   if(req.method == "POST" && pathname === "/move_screen"){//画面遷移API
     const requestJson = await req.json();

@@ -1,3 +1,4 @@
+import { getUserInfo } from "../lib/user.js";
 import { Timer } from "/src/components/Timer.js";
 
 export const Task = {
@@ -61,58 +62,50 @@ export const Task = {
       default: "タスク名",
     },
     connection: { required: true },
-    relatedUserId: {
-      type: String,
-      required: true,
-    },
-    ws: {
-      type: WebSocket,
-      required: true,
-    },
-    localStream: {
-      required: false,
-    },
   },
 
   data() {
     return {
       progress: 100,
       useRemoteStream: true,
-      remoteStream: null,
-    };
-  },
-
-  created() {
-    this.ws.onclose = () => {
-      this.$router.push({
-        name: "upload-photo",
-        params: { relatedUserId: this.relatedUserId },
-      });
     };
   },
 
   mounted() {
     const video = this.$refs.video;
-    this.connection.on("stream", (stream) => {
-      this.remoteStream = stream;
-      video.srcObject ??= stream;
-      video.play();
+    video.srcObject ??= this.connection.remoteStream;
+    video.play();
+  },
+
+  async destroyed() {
+    const { peer } = this.connection;
+    peer.destroy();
+
+    await fetch("/api/matching/cancel", {
+      method: "POST",
+      body: JSON.stringify({ userId: getUserInfo().userId }),
     });
   },
 
   methods: {
     complete() {
-      this.ws.close();
+      this.$router.push({
+        name: "upload-photo",
+        params: { relatedUserId: this.connection.userId },
+      });
     },
     setProgress(progress) {
       this.progress = progress;
+      if (progress === 0) {
+        this.complete();
+      }
     },
     flip() {
       const video = this.$refs.video;
       this.useRemoteStream = !this.useRemoteStream;
       video.srcObject = this.useRemoteStream
-        ? this.localStream
-        : this.remoteStream;
+        ? this.connection.localStream
+        : this.connection.remoteStream;
       video.play();
     },
   },
