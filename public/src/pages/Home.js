@@ -1,4 +1,3 @@
-import { Habipower } from "/src/components/Habipower.js";
 import { HomeBottomNavi } from "/src/components/HomeBottomNavi.js";
 
 export const Home = {
@@ -15,14 +14,12 @@ export const Home = {
   `,
 
   components: {
-    Habipower,
     HomeBottomNavi,
   },
 
   data() {
     return {
       taskName: "",
-      habipower: null,
       hasNotifications: false,
     };
   },
@@ -34,7 +31,6 @@ export const Home = {
     const body = JSON.stringify({ id: userId });
     const res = await fetch("/api/habipower", { method: "POST", body });
     const json = await res.json();
-    this.habipower = json.habipower;
     this.hasNotifications = json.has_notifications;
   },
 
