@@ -76,14 +76,14 @@ serve(async (req) => {
     let userrate = 0;//評価された回数
     let habipower = 0;//ハビパワー
     let countrate = 0; //順位
-    let i = 0;
+    let index = 0;
     // const multi = Math.floor(Math.random()) + 1;//1～のランダムな数をかける
 
     //ハビパワー計算部分↓
-    for(i = 0; i < userArray.length; i++){//ダミーのAPIを探してヒットするとrateが上がる
-      if(userid == userArray[i].id){
-        userArray[i].rate++;
-        userrate = userArray[i].rate;
+    for(index = 0; index < userArray.length; index++){//ダミーのAPIを探してヒットするとrateが上がる
+      if(userid == userArray[index].id){
+        userArray[index].rate++;
+        userrate = userArray[index].rate;
         break;
       }
     }
@@ -95,7 +95,7 @@ serve(async (req) => {
     //カウントレートをどう使うか
     habipower = userrate * (userArray.length - countrate) * 271.8;
     (habipower).toFixed();
-    userArray[i-1].habipower = habipower;//ハビパワーの代入
+    userArray[index].habipower = habipower;//ハビパワーの代入
     return new Response();
   }
 
