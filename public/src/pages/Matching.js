@@ -22,16 +22,13 @@ export const Matching = {
   },
 
   async created() {
-    const { connection, relatedUserId, localStream, ws } = await connect();
+    const connection = await connect();
 
     this.$router.push({
       name: "task",
       params: {
         taskName: this.taskName,
         connection,
-        relatedUserId,
-        localStream,
-        ws,
       },
     });
   },
