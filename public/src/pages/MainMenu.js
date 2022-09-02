@@ -55,7 +55,7 @@ export const MainMenu = {
       const res = await fetch(`/api/user?id=${userId}`);
       json = await res.json();
     }
-    this.habipower = json.habipower;
+    this.habipower = json.habipower ?? 0;
   },
 
   methods: {
