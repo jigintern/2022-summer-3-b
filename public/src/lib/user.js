@@ -27,13 +27,22 @@ export const getUserInfo = () => {
   return null;
 };
 
+const postUserInfo = async (userName, userId) => {
+  const body = JSON.stringify({ name: userName, id: userId });
+  await fetch("/api/user/resist", { method: "POST", body });
+};
+
 export const registerUserInfo = async (userName) => {
   const userId = window.crypto.randomUUID();
   userInfo = { userName, userId };
 
-  const body = JSON.stringify({ name: userName, id: userId });
-  await fetch("/api/user/resist", { method: "POST", body });
+  await postUserInfo(userName, userId);
 
   Cookies.set(COOKIE_KEY.USER_NAME, userName, { expires: 7 });
   Cookies.set(COOKIE_KEY.USER_ID, userId, { expires: 7 });
+};
+
+export const reRegisterUserInfo = async () => {
+  const { userName, userId } = userInfo;
+  await postUserInfo(userName, userId);
 };

@@ -64,9 +64,9 @@ serve(async (req) => {
     const targetUserId = query.get("id");
     const res = taskArray
       .filter((task) => task.related_user_id === targetUserId)
-      .map(({ related_user_id, image }) => {
-        const userName = userArray.find(user=> user.id == related_user_id)?.name ?? "";
-        return { userId: related_user_id, userName, image };
+      .map(({ user_id, image }) => {
+        const userName = userArray.find(user=> user.id == user_id)?.name ?? "";
+        return { userId: user_id, userName, image };
       });
     return new Response(JSON.stringify(res));
   }
@@ -120,6 +120,18 @@ serve(async (req) => {
     const userId = requestJson.id;
     userArray.push(new User(userName,userId));    
     return new Response();
+  }
+  if(req.method == "GET" && pathname === "/api/user"){//ユーザー情報取得API
+    const query = new URL(req.url).searchParams;
+    const userId = query.get("id");
+    const user = userArray.find(user => user.id === userId);
+    if(user) {
+      return new Response(JSON.stringify({
+        userName: user.name,
+        habipower: user.habipower
+      }));
+    }
+    return new Response("null");
   }
 
   return serveDir(req, {

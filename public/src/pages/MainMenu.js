@@ -1,4 +1,4 @@
-import { getUserInfo } from "../lib/user.js";
+import { getUserInfo, reRegisterUserInfo } from "../lib/user.js";
 import { Habipower } from "/src/components/Habipower.js";
 
 export const MainMenu = {
@@ -47,9 +47,14 @@ export const MainMenu = {
 
   async created() {
     const userId = getUserInfo().userId;
-    const body = JSON.stringify({ id: userId });
-    const res = await fetch("/api/habipower", { method: "POST", body });
-    const json = await res.json();
+    const res = await fetch(`/api/user?id=${userId}`);
+    let json = await res.json();
+
+    if (json === null) {
+      reRegisterUserInfo();
+      const res = await fetch(`/api/user?id=${userId}`);
+      json = await res.json();
+    }
     this.habipower = json.habipower;
   },
 
