@@ -2,7 +2,7 @@ export const Habipower = {
   template: `
     <v-card>
 
-      <v-card-title>
+      <v-card-title class="justify-center">
         あなたのHabiPower
       </v-card-title>
 

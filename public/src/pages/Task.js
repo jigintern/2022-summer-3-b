@@ -19,7 +19,7 @@ export const Task = {
         </div>
 
         <v-card-actions class="d-flex flex-row">
-          タスク
+          {{remoteUserName}}
           <v-spacer />
           <v-btn icon @click="flip">
             <v-icon>mdi-camera-flip-outline</v-icon>
@@ -69,7 +69,15 @@ export const Task = {
     return {
       progress: 100,
       useRemoteStream: true,
+      remoteUserName: "",
     };
+  },
+
+  async created() {
+    const userId = this.connection.userId;
+    const res = await fetch(`/api/user?id=${userId}`);
+    const json = await res.json();
+    this.remoteUserName = json.userName;
   },
 
   mounted() {

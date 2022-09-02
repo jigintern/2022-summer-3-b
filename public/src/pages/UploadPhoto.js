@@ -3,20 +3,23 @@ import { getUserInfo } from "../lib/user.js";
 
 export const UploadPhoto = {
   template: `
-    <v-container fill-height>
+    <v-container fill-height class="pa-0">
       <v-row fill-height justify="center" align-content="center">
-        <v-col align="center" cols="10">
+        <v-col align="center" cols="12">
 
           <v-card v-if="imageData">
             <v-img :src="imageData.data" style="width:100%;"/>
             <v-card-actions>
-              <v-btn @click="retry">撮り直し</v-btn>
+              <v-btn @click="retry" depressed>撮り直し</v-btn>
               <v-spacer />
-              <v-btn @click="send" color="primary">送信</v-btn>
+              <v-btn @click="send" color="primary" depressed>送信</v-btn>
             </v-card-actions>
           </v-card>
 
-          <v-card v-else>
+          <v-card v-else style="width; 100%">
+            <v-card-title class="justify-center" style="width: 100%;">
+              今回の成果を撮影
+            </v-card-title>
             <camera @capture="capture" :width="width" />
           </v-card>
 
