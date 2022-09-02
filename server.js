@@ -58,9 +58,9 @@ serve(async (req) => {
     const query = new URL(req.url).searchParams;
     const targetUserId = query.get("id");
     const res = taskArray
-      .filter((task) => task.user_id === targetUserId)
+      .filter((task) => task.related_user_id === targetUserId)
       .map(({ related_user_id, image }) => {
-        const userName = userArray.find(user=> user.id == related_user_id).name;
+        const userName = userArray.find(user=> user.id == related_user_id)?.name ?? "";
         return { userId: related_user_id, userName, image };
       });
     return new Response(JSON.stringify(res));
