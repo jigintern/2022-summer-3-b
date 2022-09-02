@@ -21,8 +21,8 @@ export const Task = {
         <v-card-actions class="d-flex flex-row">
           {{remoteUserName}}
           <v-spacer />
-          <v-btn icon @click="flip">
-            <v-icon>mdi-camera-flip-outline</v-icon>
+          <v-btn @click="useLocalStream=!useLocalStream" color="primary" :text="false" icon>
+            <v-icon>mdi-account-convert</v-icon>
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -68,7 +68,7 @@ export const Task = {
   data() {
     return {
       progress: 100,
-      useRemoteStream: true,
+      useLocalStream: false,
       remoteUserName: "",
     };
   },
@@ -109,10 +109,12 @@ export const Task = {
         this.complete();
       }
     },
-    flip() {
+  },
+
+  watch: {
+    useLocalStream(useLocal) {
       const video = this.$refs.video;
-      this.useRemoteStream = !this.useRemoteStream;
-      video.srcObject = this.useRemoteStream
+      video.srcObject = useLocal
         ? this.connection.localStream
         : this.connection.remoteStream;
       video.play();
