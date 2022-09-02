@@ -5,6 +5,7 @@ export const Camera = {
 
         <v-col align="center" cols="12">
           <video
+            playsinline
             ref="video"
             @loadeddata="initHeight"
             style="width: 100%;"

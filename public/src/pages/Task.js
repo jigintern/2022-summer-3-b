@@ -11,6 +11,7 @@ export const Task = {
           style="height: auto; background-color: black;"
         >
           <video
+            playsinline
             ref="video"
             class="d-flex ma-auto"
             style="max-width: 100%; max-height: 50vh; height: auto;"
